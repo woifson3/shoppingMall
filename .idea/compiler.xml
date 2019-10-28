@@ -8,6 +8,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="gmall-admin" />
         <module name="gmall-core" />
+        <module name="gmall-oms" />
+        <module name="gmall-pms" />
+        <module name="gmall-sms" />
+        <module name="gmall-ums" />
+        <module name="gmall-wms" />
       </profile>
     </annotationProcessing>
   </component>
