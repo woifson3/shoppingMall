@@ -1,12 +1,14 @@
 package com.atguigu.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.atguigu.gmall.pms.vo.SpuInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +19,12 @@ import com.atguigu.gmall.pms.entity.SpuInfoEntity;
 import com.atguigu.gmall.pms.service.SpuInfoService;
 
 
-
-
 /**
  * spu信息
  *
- * @author gesanqiang
- * @email san@atguigu.com
- * @date 2019-10-29 16:47:12
+ * @author sx
+ * @email sx@atguigu.com
+ * @date 2019-10-28 20:04:41
  */
 @Api(tags = "spu信息 管理")
 @RestController
@@ -32,6 +32,35 @@ import com.atguigu.gmall.pms.service.SpuInfoService;
 public class SpuInfoController {
     @Autowired
     private SpuInfoService spuInfoService;
+
+    /**
+     * 2.3.1.   检索商品
+     *
+     *    查询需要两个参数：key 和 catId
+     *
+     *spu_info和？？？
+     * @param catId  ：F12中的catId
+     * @param condition  :F12中的key
+     */
+    @ApiOperation("spu商品信息查询")
+    @GetMapping
+    public Resp<PageVo> querySpuInfoByKeyPage( @RequestParam(value = "catId" ,defaultValue ="0") Long catId,QueryCondition condition) {
+        //使用queryCondition是因为有这个封装好的类，里面有自己添加的查询条件的字段，那个就代表了以后在输入框里搜索的内容就用condition来代替
+       PageVo page= this.spuInfoService.querySpuInfoByKeyPage(catId,condition);
+        return Resp.ok(page);
+    }
+
+    /**
+     * 列表2
+     */
+    @ApiOperation("分页查询(排序)")
+    @PostMapping("/list")
+    @PreAuthorize("hasAuthority('pms:spuinfo:list')")
+    public Resp<List<SpuInfoEntity>> querySpuPage(@RequestBody QueryCondition queryCondition) {
+        PageVo page = spuInfoService.queryPage(queryCondition);
+
+        return Resp.ok((List<SpuInfoEntity>)page.getList());
+    }
 
     /**
      * 列表
@@ -52,8 +81,8 @@ public class SpuInfoController {
     @ApiOperation("详情查询")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAuthority('pms:spuinfo:info')")
-    public Resp<SpuInfoEntity> info(@PathVariable("id") Long id){
-		SpuInfoEntity spuInfo = spuInfoService.getById(id);
+    public Resp<SpuInfoEntity> info(@PathVariable("id") Long id) {
+        SpuInfoEntity spuInfo = spuInfoService.getById(id);
 
         return Resp.ok(spuInfo);
     }
@@ -64,8 +93,8 @@ public class SpuInfoController {
     @ApiOperation("保存")
     @PostMapping("/save")
     @PreAuthorize("hasAuthority('pms:spuinfo:save')")
-    public Resp<Object> save(@RequestBody SpuInfoEntity spuInfo){
-		spuInfoService.save(spuInfo);
+    public Resp<Object> save(@RequestBody SpuInfoVO spuInfoVO) {
+        spuInfoService.bigSave(spuInfoVO);
 
         return Resp.ok(null);
     }
@@ -76,8 +105,8 @@ public class SpuInfoController {
     @ApiOperation("修改")
     @PostMapping("/update")
     @PreAuthorize("hasAuthority('pms:spuinfo:update')")
-    public Resp<Object> update(@RequestBody SpuInfoEntity spuInfo){
-		spuInfoService.updateById(spuInfo);
+    public Resp<Object> update(@RequestBody SpuInfoEntity spuInfo) {
+        spuInfoService.updateById(spuInfo);
 
         return Resp.ok(null);
     }
@@ -88,8 +117,8 @@ public class SpuInfoController {
     @ApiOperation("删除")
     @PostMapping("/delete")
     @PreAuthorize("hasAuthority('pms:spuinfo:delete')")
-    public Resp<Object> delete(@RequestBody Long[] ids){
-		spuInfoService.removeByIds(Arrays.asList(ids));
+    public Resp<Object> delete(@RequestBody Long[] ids) {
+        spuInfoService.removeByIds(Arrays.asList(ids));
 
         return Resp.ok(null);
     }

@@ -24,7 +24,7 @@ import com.atguigu.gmall.sms.service.CouponSpuRelationService;
  *
  * @author gesanqiang
  * @email san@atguigu.com
- * @date 2019-10-28 21:02:18
+ * @date 2019-10-30 20:21:04
  */
 @Api(tags = "优惠券与产品关联 管理")
 @RestController

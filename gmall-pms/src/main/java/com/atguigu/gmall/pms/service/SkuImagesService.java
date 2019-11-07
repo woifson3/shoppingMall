@@ -9,9 +9,9 @@ import com.atguigu.core.bean.QueryCondition;
 /**
  * sku图片
  *
- * @author gesanqiang
- * @email san@atguigu.com
- * @date 2019-10-29 16:47:12
+ * @author sx
+ * @email sx@atguigu.com
+ * @date 2019-10-28 20:04:41
  */
 public interface SkuImagesService extends IService<SkuImagesEntity> {
 

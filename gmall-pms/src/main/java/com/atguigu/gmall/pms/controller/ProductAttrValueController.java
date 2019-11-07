@@ -1,12 +1,15 @@
 package com.atguigu.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.atguigu.gmall.pms.vo.ProductAttrValueVO;
+import com.atguigu.gmall.pms.vo.SpuAttributeValueVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +20,12 @@ import com.atguigu.gmall.pms.entity.ProductAttrValueEntity;
 import com.atguigu.gmall.pms.service.ProductAttrValueService;
 
 
-
-
 /**
  * spu属性值
  *
- * @author gesanqiang
- * @email san@atguigu.com
- * @date 2019-10-29 16:47:12
+ * @author sx
+ * @email sx@atguigu.com
+ * @date 2019-10-28 20:04:41
  */
 @Api(tags = "spu属性值 管理")
 @RestController
@@ -32,6 +33,23 @@ import com.atguigu.gmall.pms.service.ProductAttrValueService;
 public class ProductAttrValueController {
     @Autowired
     private ProductAttrValueService productAttrValueService;
+
+    /**
+     * 编写远程接口(1)：得到List<>VO的数据，展示到页面上（就是拿到检索属性）
+     *
+     * 注意此时用于和页面交互的表在pma_interface中的SpuAttributeValueVO。
+     * ***在productAttrValueServiceImpl 中进行把Entity表的数据放到前端对应的表VO中***
+     *
+     *看实现类中有个前后端数据装载的知识点
+     * 表 attr和product_attr_value表查询出检索属性（页面）
+     * @param spuId  :通过spuId?????
+     * @return
+     */
+    @GetMapping("{spuId}")
+    public Resp<List<SpuAttributeValueVO>> querySearchAttrValue(@PathVariable("spuId")Long spuId ){
+    List<SpuAttributeValueVO> attrValueVOS= this. productAttrValueService.querySearchAttrValue(spuId);
+        return Resp.ok(attrValueVOS);
+    }
 
     /**
      * 列表
@@ -52,8 +70,8 @@ public class ProductAttrValueController {
     @ApiOperation("详情查询")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAuthority('pms:productattrvalue:info')")
-    public Resp<ProductAttrValueEntity> info(@PathVariable("id") Long id){
-		ProductAttrValueEntity productAttrValue = productAttrValueService.getById(id);
+    public Resp<ProductAttrValueEntity> info(@PathVariable("id") Long id) {
+        ProductAttrValueEntity productAttrValue = productAttrValueService.getById(id);
 
         return Resp.ok(productAttrValue);
     }
@@ -64,8 +82,8 @@ public class ProductAttrValueController {
     @ApiOperation("保存")
     @PostMapping("/save")
     @PreAuthorize("hasAuthority('pms:productattrvalue:save')")
-    public Resp<Object> save(@RequestBody ProductAttrValueEntity productAttrValue){
-		productAttrValueService.save(productAttrValue);
+    public Resp<Object> save(@RequestBody ProductAttrValueEntity productAttrValue) {
+        productAttrValueService.save(productAttrValue);
 
         return Resp.ok(null);
     }
@@ -76,8 +94,8 @@ public class ProductAttrValueController {
     @ApiOperation("修改")
     @PostMapping("/update")
     @PreAuthorize("hasAuthority('pms:productattrvalue:update')")
-    public Resp<Object> update(@RequestBody ProductAttrValueEntity productAttrValue){
-		productAttrValueService.updateById(productAttrValue);
+    public Resp<Object> update(@RequestBody ProductAttrValueEntity productAttrValue) {
+        productAttrValueService.updateById(productAttrValue);
 
         return Resp.ok(null);
     }
@@ -88,8 +106,8 @@ public class ProductAttrValueController {
     @ApiOperation("删除")
     @PostMapping("/delete")
     @PreAuthorize("hasAuthority('pms:productattrvalue:delete')")
-    public Resp<Object> delete(@RequestBody Long[] ids){
-		productAttrValueService.removeByIds(Arrays.asList(ids));
+    public Resp<Object> delete(@RequestBody Long[] ids) {
+        productAttrValueService.removeByIds(Arrays.asList(ids));
 
         return Resp.ok(null);
     }

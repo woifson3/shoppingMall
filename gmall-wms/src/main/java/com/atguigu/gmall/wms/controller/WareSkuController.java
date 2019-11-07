@@ -1,12 +1,14 @@
 package com.atguigu.gmall.wms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import com.atguigu.gmall.wms.entity.WareSkuEntity;
 import com.atguigu.gmall.wms.service.WareSkuService;
 
-
+import javax.validation.constraints.Max;
 
 
 /**
@@ -32,6 +34,20 @@ import com.atguigu.gmall.wms.service.WareSkuService;
 public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
+
+    /**
+     * 2.4.2.   获取某个sku的库存信息
+     *
+     * 因为在需要查询出来的wms的ware_sku的信息，这好这张表中有sku_id，可以通过这个sku_id来获得这张表里的信息。所以直接在controller层直接查出数据，不走service
+     * 泛型是集合：因为前端需要的正确响应就是一个集合
+     * @param skuId
+     * @return
+     */
+    @GetMapping("{skuId}")
+    public Resp<List<WareSkuEntity>> queryWareBySkuId(@PathVariable("skuId")Long skuId){
+   List<WareSkuEntity> wareSkuEntities= wareSkuService.list(new QueryWrapper<WareSkuEntity>().eq("sku_id",skuId));
+        return Resp.ok(wareSkuEntities);
+    }
 
     /**
      * 列表
